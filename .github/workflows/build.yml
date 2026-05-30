@@ -1,37 +1,37 @@
 name: Build K40 Kernel
 
-于:
+on:
   workflow_dispatch:
     inputs:
       ksu:
         description: '添加KSU支持'
         required: false
-        默认: 'true'
+        default: 'true'
       config_path:
         description: '内核配置文件路径（如果不需要KSU则忽略）/一般默认即可'
         required: false
-        输入: string
-        默认: 'arch/arm64/configs/'
+        type: string
+        default: 'arch/arm64/configs/'
       kernel_tag:
         description: '内核代码分支/Tag'
         required: false
-        输入: string
-        默认: 'master'
+        type: string
+        default: 'master'
       config_name:
         description: '内核编译配置文件名'
         required: false
-        输入: string
-        默认: 'alioth_hylab_defconfig'
+        type: string
+        default: 'alioth_hylab_defconfig'
       git_url:
         description: '内核仓库地址'
         required: false
-        输入: string
-        默认: 'https://github.com/zfdx123/kernel_xiaomi_alioth.git'
+        type: string
+        default: 'https://github.com/zfdx123/kernel_xiaomi_alioth.git'
       clang_url:
         description: '编译器下载地址'
         required: false
-        输入: string
-        默认: 'https://github.com/XSans0/WeebX-Clang/releases/download/WeebX-Clang-19.1.5-release/WeebX-Clang-19.1.5.tar.gz'
+        type: string
+        default: 'https://github.com/XSans0/WeebX-Clang/releases/download/WeebX-Clang-19.1.5-release/WeebX-Clang-19.1.5.tar.gz'
 
 jobs:
 
@@ -95,11 +95,8 @@ jobs:
           echo "CONFIG_CGROUPS=y" >> ${{ inputs.config_path }}${{ inputs.config_name }}
           echo "CONFIG_SECCOMP=y" >> ${{ inputs.config_path }}${{ inputs.config_name }}
           echo "CONFIG_OVERLAY_FS=y" >> ${{ inputs.config_path }}${{ inputs.config_name }}
-          
-          # 🚨 亲爹补丁：强行开启 Droidspaces 核心依赖的总开关
           echo "CONFIG_SYSVIPC=y" >> ${{ inputs.config_path }}${{ inputs.config_name }}
           echo "CONFIG_SYSVIPC_SYSCTL=y" >> ${{ inputs.config_path }}${{ inputs.config_name }}
-          
           git config --global user.email "robot@example.com"
           git config --global user.name "robot"
           git add ${{ inputs.config_path }}${{ inputs.config_name }}
